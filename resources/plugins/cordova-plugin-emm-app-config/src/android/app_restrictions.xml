@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<restrictions xmlns:android="http://schemas.android.com/apk/res/android">
+    <restriction
+            android:key="baseUrl"
+            android:title="baseUrl"
+            android:description="@string/appconfig_baseUrl"
+            android:restrictionType="string" />
+
+    <restriction
+            android:key="disclaimer"
+            android:title="disclaimer"
+            android:description="@string/appconfig_disclaimer"
+            android:restrictionType="string" />
+</restrictions>

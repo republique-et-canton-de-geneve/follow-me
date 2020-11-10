@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2017 Oracle and/or its affiliates
+  The Universal Permissive License (UPL), Version 1.0
+-->
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:rim="http://www.blackberry.com/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="cordova-plugin-emm-app-config"
+    version="1.0.2">
+    <name>Cordova EMM App Config Plugin</name>
+    <description>Enables apps to retrieve information on EMM application configuration (or managed app configuration)</description>
+    <license>UPL 1.0</license>
+    <keywords>cordova,emmappconfig</keywords>
+    <repo>https://github.com/oracle/cordova-plugin-emm-app-config.git</repo>
+
+    <js-module src="www/emmappconfig.js" name="emmappconfig">
+        <clobbers target="cordova.plugins.EmmAppConfig" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <resource-file src="src/android/app_restrictions.xml" target="res/xml/app_restrictions.xml" />
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="EmmAppConfig" >
+                <param name="android-package" value="oracle.jet.emm.EmmAppConfig"/>
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data android:name="android.content.APP_RESTRICTIONS" android:resource="@xml/app_restrictions" />
+        </config-file>
+        <config-file target="res/values/strings.xml" parent="/resources">
+            <string name="appconfig_baseUrl">Server URL</string>
+            <string name="appconfig_disclaimer">Disclaimer content</string>
+        </config-file>
+        <source-file src="src/android/EmmAppConfig.java" target-dir="src/oracle/jet/emm" />
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="EmmAppConfig">
+                <param name="ios-package" value="JETEmmAppConfig"/>
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/JETEmmAppConfig.h" />
+        <source-file src="src/ios/JETEmmAppConfig.m" />
+    </platform>
+
+
+</plugin>

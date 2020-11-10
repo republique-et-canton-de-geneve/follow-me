@@ -1,0 +1,50 @@
+<ion-header class="ion-no-border logo-header">
+</ion-header>
+
+<ion-content>
+    <div class="compass">
+        <div class="compass-mask">
+            <div [style.transform]="'rotate(' + (magneticHeading ? -magneticHeading : 0) + 'deg)'" class="compass-fg"></div>
+        </div>
+        <div class="compass-value">{{magneticHeading | number: '1.0-0'}}</div>
+        <div class="compass-dir">{{direction()}}</div>
+
+    </div>
+    <div class="pause" *ngIf="!recording">
+        <h1>Arrêt</h1>
+        <span>Le service de géolocalisation est désactivé.<br/>Pour l'activer, appuyez sur le bouton rouge au bas de l'écran.</span>
+    </div>
+    <div class="searching" *ngIf="!apiService.lastLocation && recording">
+        <ion-spinner name="dots"></ion-spinner>
+    </div>
+    <div class="location" *ngIf="apiService.lastLocation && recording">
+        <ul class="locations-values">
+            <li class="latitude">
+                <label>Latitude</label>
+                <span><strong>{{splitCoord(apiService.lastLocation.latitude)[0]}}</strong>.{{splitCoord(apiService.lastLocation.latitude)[1]}}</span>
+            </li>
+            <li class="longitude">
+                <label>Longitude</label>
+                <span><strong>{{splitCoord(apiService.lastLocation.longitude)[0]}}</strong>.{{splitCoord(apiService.lastLocation.longitude)[1]}}</span>
+            </li>
+            <li class="altitude">
+                <label>Altitude</label>
+                <span>{{apiService.lastLocation.altitude| number: '1.0-0'}} m</span>
+            </li>
+            <li class="precision">
+                <label>Précision</label>
+                <span [class]="accuracyClass(apiService.lastLocation.accuracy)">{{apiService.lastLocation.accuracy| number: '1.0-0'}} m</span>
+            </li>
+            <li class="timestamp">
+                <label>Dernière transmission</label>
+                <span [class]="apiService.lastPostIsSuccess ? 'high' : 'low'">{{ apiService.lastPostSuccess|date:'HH:mm:ss'}}</span>
+            </li>
+        </ul>
+    </div>
+</ion-content>
+<ion-footer>
+    <div class="footer-inner">
+        <span class="btn record" [ngClass]="recording ? '' : 'off'" (click)="switchRecord()"></span>
+        <span class="btn settings" (click)="presentSettings()"></span>
+    </div>
+</ion-footer>

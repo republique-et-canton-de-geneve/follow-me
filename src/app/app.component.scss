@@ -1,0 +1,26 @@
+@import "../theme/variables";
+
+
+ion-header.logo-header{
+  --home-logo-size : 150px;
+
+  @media screen and (max-height: $small-scree-max-height) {
+    --home-logo-size : 100px;
+  }
+
+  background-color: transparent;
+  background-image: url("/assets/header-logo.png");
+  background-position: center;
+  background-size: var(--home-logo-size) auto;
+  background-repeat: no-repeat;
+  height: 150px;
+  margin-top: var(--cordova-statusbar-padding);
+}
+
+ion-modal ion-header{
+  padding-top: var(--cordova-statusbar-padding);
+}
+
+ion-footer{
+  padding-bottom: var(--cordova-navbar-padding);
+}

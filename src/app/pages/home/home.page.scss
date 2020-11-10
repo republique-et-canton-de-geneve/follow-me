@@ -1,0 +1,277 @@
+@import "src/theme/variables";
+
+app-home.ion-page {
+
+  // vars
+  $home-right-padding: 15%;
+  --home-compass-margin-top : 16px;
+  --home-compass-value-font-size : 56px;
+  --home-compass-direction-font-size : 22px;
+  --home-compass-margin-bottom : -100px;
+  --home-location-label-font-size : 15px;
+  --home-location-value-font-size : 36px;
+  --home-location-value-line-height : 34px;
+  --home-location-strong-font-size : 48px;
+  --home-location-strong-line-height : 32px;
+  --home-location-margin-bottom : 16px;
+
+  // For small screens
+  @media screen and (max-height: $small-scree-max-height) {
+    --home-compass-margin-top : 0px;
+    --home-compass-value-font-size : 42px;
+    --home-compass-direction-font-size : 16px;
+    --home-compass-margin-bottom : -130px;
+    --home-location-label-font-size : 10px;
+    --home-location-value-font-size : 26px;
+    --home-location-value-line-height : 24px;
+    --home-location-strong-font-size : 38px;
+    --home-location-strong-line-height : 22px;
+    --home-location-margin-bottom : 10px;
+  }
+
+
+  background-image: url("/assets/home-bg.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  ion-content {
+    --background: transparent;
+    text-align: center;
+
+    div.compass {
+      display: inline-block;
+      height: 263px;
+      width: 263px;
+      margin-top: var(--home-compass-margin-top);
+      margin-bottom: var(--home-compass-margin-bottom);
+      background-image: url("/assets/compass-bg.png");
+      background-position: center;
+      background-size: 263px 263px;
+      background-repeat: no-repeat;
+
+      .compass-mask {
+        width: 263px;
+        height: 54px;
+        overflow: hidden;
+        position: relative;
+
+        .compass-fg {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 263px;
+          width: 263px;
+          background-image: url("/assets/compass-fg.png");
+          background-position: center;
+          background-size: 263px 263px;
+          background-repeat: no-repeat;
+        }
+      }
+
+      .compass-value {
+        position: relative;
+        font-weight: bold;
+        font-size: var(--home-compass-value-font-size);
+        color: #fff;
+        margin-top: -16px;
+
+        &::after {
+          content: '°';
+          position: absolute;
+        }
+      }
+
+      .compass-dir {
+        color: #bfbfbf;
+        font-size: var(--home-compass-direction-font-size);
+        margin-top: -8px;
+      }
+
+    }
+
+    .searching {
+      ion-spinner {
+        transform: scale(2);
+      }
+    }
+
+    .location {
+      text-align: right;
+
+      ul.locations-values {
+        list-style: none;
+        margin: 0;
+        padding: 0 $home-right-padding 0 0;
+
+        > li {
+          display: block;
+          margin-bottom: var(--home-location-margin-bottom);
+
+          > label {
+            display: block;
+            opacity: 0.5;
+            text-transform: uppercase;
+            font-size: var(--home-location-label-font-size);
+            font-weight: 500;
+
+            &:after {
+              display: inline-block;
+              width: 12px;
+              height: 12px;
+              content: '';
+              margin-left: 4px;
+              background-image: url("/assets/icon-location-white.png");
+              background-position: center;
+              background-size: contain;
+              background-repeat: no-repeat;
+            }
+          }
+
+          > span {
+            font-weight: bold;
+            font-size: var(--home-location-value-font-size);
+            line-height: var(--home-location-value-line-height);
+
+            > strong {
+              font-size: var(--home-location-strong-font-size);
+              line-height: var(--home-location-strong-line-height);
+            }
+          }
+
+          &.timestamp {
+            > label:after {
+              background-image: url("/assets/icon-wifi-white.png");
+            }
+          }
+
+          &.altitude {
+            > label:after {
+              background-image: url("/assets/icon-altitude-white.png");
+            }
+          }
+
+          &.precision {
+            > label:after {
+              background-image: url("/assets/icon-precision-white.png");
+            }
+          }
+
+          &.precision, &.timestamp {
+            > span {
+              &:before {
+                content: '';
+                display: inline-block;
+                height: 14px;
+                width: 14px;
+                border-radius: 7px;
+                background-color: var(--ion-color-success);
+                margin-right: 8px;
+                margin-bottom: 5px;
+              }
+
+              &.high:before {
+                background-color: var(--ion-color-success);
+              }
+
+              &.medium:before {
+                background-color: var(--ion-color-warning);
+              }
+
+              &.low:before {
+                background-color: var(--ion-color-danger);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  ion-footer {
+
+    .footer-inner{
+      text-align: center;
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+
+    // Record btn vars
+    $record-btn-size: 62px;
+    $record-btn-border-size: 4px;
+    $record-btn-margin: 8px;
+    $record-btn-red: #e60032;
+    $record-btn-transition-time: 250ms;
+
+    .btn {
+      display: inline-block;
+      //Settings btn vars
+      $settings-btn-size: 30px;
+
+      &.record{
+        width: $record-btn-size;
+        height: $record-btn-size;
+        margin-bottom: $record-btn-margin;
+        border: $record-btn-border-size solid #fff;
+        border-radius: $record-btn-size/2;
+        opacity: 0.5;
+        position: relative;
+        transition: border-color $record-btn-transition-time ease-in-out, opacity $record-btn-transition-time ease-in-out;
+
+
+        &:after{
+          content: '';
+          width: 20px;
+          height: 20px;
+          position: absolute;
+          top: calc(50% - 10px);
+          left: calc(50% - 10px);
+          background-color: #fff;
+          border-radius: 0px;
+          transition: background-color $record-btn-transition-time ease-in-out, border-radius $record-btn-transition-time ease-in-out;
+
+        }
+
+        &:before{
+          content:'';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          left: 0;
+          top: 0;
+          background: radial-gradient(circle closest-side, transparent, $record-btn-red);
+          filter: blur(20px);
+          opacity: 0;
+          transition: opacity $record-btn-transition-time ease-in-out;
+        }
+
+        &.off{
+          opacity: 1;
+          border-color: $record-btn-red;
+          &:after{
+            background-color: $record-btn-red;
+            border-radius: 10px;
+          }
+          &:before{
+            opacity: 0.5;
+          }
+        }
+      }
+
+      &.settings{
+        position: absolute;
+        right: $home-right-padding;
+        bottom: $record-btn-margin + (($record-btn-size - $settings-btn-size)/2);
+        width: $settings-btn-size;
+        height: $settings-btn-size;
+        background-image: url("/assets/icon-settings-white.png");
+        background-position: center;
+        background-size: $settings-btn-size;
+        background-repeat: no-repeat;
+        opacity: 0.75;
+      }
+    }
+
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "FollowMe",
+  "id": "ch.ge.followme",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
