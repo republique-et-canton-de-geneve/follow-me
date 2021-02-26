@@ -47,7 +47,7 @@ export class SettingsPage {
                 public apiService: ApiService,
                 public bufferService: BufferService,
                 public backgroundGeolocation: BackgroundGeolocation,
-                private log: LogProvider) {
+                private readonly log: LogProvider) {
         this.settingsService.getSettings().then((settings: Settings) => {
             this.settings = settings;
         });

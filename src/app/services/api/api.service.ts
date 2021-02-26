@@ -65,8 +65,8 @@ export class ApiService {
     public lastBatteryStatus: BatteryStatusResponse;
 
 
-    constructor(public settingsService: SettingsService,
-                private http: HTTP,
+    constructor(public readonly settingsService: SettingsService,
+                private readonly http: HTTP,
                 private batteryStatus: BatteryStatus,
                 public toastController: ToastController,
                 public bufferService: BufferService,

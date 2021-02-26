@@ -53,14 +53,14 @@ export class AppComponent {
     }
 
     constructor(
-        private platform: Platform,
-        private splashScreen: SplashScreen,
-        private statusBar: StatusBar,
-        private router: Router,
-        private modalController: ModalController,
-        private settingsService: SettingsService,
-        private window: Window,
-        private log: LogProvider,
+        private readonly platform: Platform,
+        private readonly splashScreen: SplashScreen,
+        private readonly statusBar: StatusBar,
+        private readonly router: Router,
+        private readonly modalController: ModalController,
+        private readonly settingsService: SettingsService,
+        private readonly window: Window,
+        private readonly log: LogProvider,
     ) {
         this.initializeApp();
     }

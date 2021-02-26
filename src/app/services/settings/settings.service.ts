@@ -57,9 +57,9 @@ export class SettingsService {
     public settingsPopulated = false;
 
     constructor(public storage: Storage,
-                private sim: Sim,
-                private device: Device,
-                private platform: Platform,
+                private readonly sim: Sim,
+                private readonly device: Device,
+                private readonly platform: Platform,
                 private readonly emmAppConfig: EmmAppConfig) {
 
         this.platform.ready().then(() => {

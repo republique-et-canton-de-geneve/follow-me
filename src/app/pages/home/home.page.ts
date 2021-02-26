@@ -93,9 +93,9 @@ export class HomePage implements AfterViewInit {
         await alert.present();
     }
 
-    constructor(private deviceOrientation: DeviceOrientation,
-                private backgroundGeolocation: BackgroundGeolocation,
-                private alertController: AlertController,
+    constructor(private readonly deviceOrientation: DeviceOrientation,
+                private readonly backgroundGeolocation: BackgroundGeolocation,
+                private readonly alertController: AlertController,
                 public modalController: ModalController,
                 public settingsService: SettingsService,
                 public apiService: ApiService,

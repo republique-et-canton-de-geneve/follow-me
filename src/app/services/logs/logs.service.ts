@@ -25,7 +25,7 @@ import {LogProvider} from "ionic-log-file-appender";
 export class LogsService {
 
 
-    constructor(private log: LogProvider) {
+    constructor(private readonly log: LogProvider) {
     }
 
     async addLog(content: string) {
