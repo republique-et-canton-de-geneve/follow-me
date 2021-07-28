@@ -37,7 +37,6 @@ export interface Settings {
     baseUrl: string;
     simNumber: string;
     uuid: string;
-    vehicleType: string;
     backgroundGeolocationConfig: BackgroundGeolocationConfig;
     sendingInterval: number;
     sendingDistance: number;
@@ -77,7 +76,6 @@ export class SettingsService {
             baseUrl: environment.apiEndpoint,
             simNumber: '',
             uuid: this.device.uuid,
-            vehicleType: 'test',
             ecoMode: true,
             ecoMax: 10,
             ecoInter: 20,

@@ -37,7 +37,6 @@ interface ApiLocation {
     SPEED?: number;
     UUID?: string;
     SIM?: string;
-    VEHICLE_TYPE?: string;
     TRIGGER?: string;
     SENDING_INTERVAL?: number;
     SENDING_DISTANCE?: number;
@@ -162,7 +161,6 @@ export class ApiService {
         location.SPEED = aLocation.speed;
         location.SIM = settings.simNumber;
         location.UUID = settings.uuid;
-        location.VEHICLE_TYPE = settings.vehicleType;
         location.TRIGGER = trigger;
         location.SENDING_DISTANCE = settings.sendingDistance;
         location.SENDING_INTERVAL = settings.sendingInterval;
