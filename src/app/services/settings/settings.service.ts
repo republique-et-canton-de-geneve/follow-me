@@ -44,6 +44,14 @@ export interface Settings {
     ecoInter: number;
     ecoMax: number;
     disclaimer?: string;
+
+    baseUrlReadonly: boolean;
+    simNumberReadonly: boolean;
+    uuidReadonly: boolean;
+	ecoMaxReadonly: boolean;
+	ecoInterReadonly: boolean;
+	sendingIntervalReadonly: boolean;
+	sendingDistanceReadonly: boolean;
 }
 
 @Injectable()
@@ -91,7 +99,14 @@ export class SettingsService {
             },
             sendingInterval: SettingsService.DEFAULT_SENDING_INTERVAL,
             sendingDistance: SettingsService.DEFAULT_SENDING_DISTANCE,
-            disclaimer: environment.defaultDisclaimer
+            disclaimer: environment.defaultDisclaimer,
+			baseUrlReadonly: false,
+			simNumberReadonly: false,
+			uuidReadonly: false,
+			ecoMaxReadonly: false,
+			ecoInterReadonly: false,
+			sendingIntervalReadonly: false,
+			sendingDistanceReadonly: false
         };
         this.settingsPopulated = true;
         return this.sim.requestReadPermission().then(
@@ -114,11 +129,62 @@ export class SettingsService {
     refreshEMMvalues() {
         const baseUrl = this.emmAppConfig.getValue('baseUrl');
         const disclaimer = this.emmAppConfig.getValue('disclaimer');
+        const simNumber = this.emmAppConfig.getValue('simNumber');
+        const uuid = this.emmAppConfig.getValue("uuid");
+        const ecoMax = this.emmAppConfig.getValue("ecoMax");
+        const ecoInter = this.emmAppConfig.getValue("ecoInter");
+        const sendingInterval = this.emmAppConfig.getValue("sendingInterval");
+        const sendingDistance = this.emmAppConfig.getValue("sendingDistance");
         let change = false;
         this.getSettings().then((settings: Settings) => {
             if (baseUrl && settings.baseUrl !== baseUrl) {
                 settings.baseUrl = baseUrl;
                 change = true;
+				if(baseUrl !== '') {
+					settings.baseUrlReadonly = true;
+				}
+            }
+            if (simNumber && settings.simNumber !== simNumber) {
+                settings.simNumber = simNumber;
+                change = true;
+				if(simNumber !== '') {
+					settings.simNumberReadonly = true;
+				}
+            }
+            if (uuid && settings.uuid !== uuid) {
+                settings.uuid = uuid;
+                change = true;
+				if(uuid !== '') {
+					settings.uuidReadonly = true;
+				}
+            }
+            if (ecoMax && settings.ecoMax !== ecoMax) {
+                settings.ecoMax = ecoMax;
+                change = true;
+				if(ecoMax !== '') {
+					settings.ecoMaxReadonly = true;
+				}
+            }
+            if (ecoInter && settings.ecoInter !== ecoInter) {
+                settings.ecoInter = ecoInter;
+                change = true;
+				if(ecoInter !== '') {
+					settings.ecoInterReadonly = true;
+				}
+            }
+            if (sendingInterval && settings.sendingInterval !== sendingInterval) {
+                settings.sendingInterval = sendingInterval;
+                change = true;
+				if(sendingInterval !== '') {
+					settings.sendingIntervalReadonly = true;
+				}
+            }
+            if (sendingDistance && settings.sendingDistance !== sendingDistance) {
+                settings.sendingDistance = sendingDistance;
+                change = true;
+				if(sendingDistance !== '') {
+					settings.sendingDistanceReadonly = true;
+				}
             }
             if (disclaimer && settings.disclaimer !== disclaimer) {
                 settings.disclaimer = disclaimer;

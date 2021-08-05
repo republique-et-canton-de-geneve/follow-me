@@ -11,15 +11,15 @@
 <ion-content class="ion-padding" *ngIf="settings">
     <ion-item>
         <ion-label position="stacked" color="medium">URL</ion-label>
-        <ion-input [(ngModel)]="settings.baseUrl"></ion-input>
+        <ion-input [readonly]="settings.baseUrlReadonly" [(ngModel)]="settings.baseUrl"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label position="stacked" color="medium">Numéro de SIM</ion-label>
-        <ion-input [(ngModel)]="settings.simNumber"></ion-input>
+        <ion-input [readonly]="settings.simNumberReadonly" [(ngModel)]="settings.simNumber"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label position="stacked" color="medium">Identifiant unique (UUID)</ion-label>
-        <ion-input [(ngModel)]="settings.uuid"></ion-input>
+        <ion-input [readonly]="settings.uuidReadonly" [(ngModel)]="settings.uuid"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label position="stacked" color="medium">Distance parcourue avant envoi (m)</ion-label>
@@ -37,18 +37,17 @@
         <ion-label position="stacked" color="medium">Mode économique</ion-label>
         <ion-toggle [(ngModel)]="settings.ecoMode" color="primary"></ion-toggle>
     </ion-item>
-
     <ion-item>
         <ion-label position="stacked" color="medium">Mode éco – Fréquence GPS limitée</ion-label>
         <ion-input readonly disabled value="{{locationConfig.locationProvider === 2 ? 'Pas de limite' : 'Limitée'}}"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label position="stacked" color="medium">Mode éco - Palier intermédiaire (%)</ion-label>
-        <ion-input [(ngModel)]="settings.ecoInter"></ion-input>
+        <ion-input [readonly]="settings.ecoInterReadonly" [(ngModel)]="settings.ecoInter"></ion-input>
     </ion-item>
     <ion-item>
         <ion-label position="stacked" color="medium">Mode éco - Palier max (%)</ion-label>
-        <ion-input [(ngModel)]="settings.ecoMax"></ion-input>
+        <ion-input [readonly]="settings.ecoMaxReadonly" [(ngModel)]="settings.ecoMax"></ion-input>
     </ion-item>
 </ion-content>
 <ion-footer>
