@@ -36,7 +36,7 @@ interface ApiLocation {
     BATTERY?: number;
     SPEED?: number;
     UUID?: string;
-    SIM?: string;
+    ID_UNIQUE?: string;
     TRIGGER?: string;
     SENDING_INTERVAL?: number;
     SENDING_DISTANCE?: number;
@@ -159,7 +159,7 @@ export class ApiService {
         location.BEARING = aLocation.bearing;
         location.BATTERY = this.lastBatteryStatus ? this.lastBatteryStatus.level : -1;
         location.SPEED = aLocation.speed;
-        location.SIM = settings.simNumber;
+        location.ID_UNIQUE = settings.idUnique;
         location.UUID = settings.uuid;
         location.TRIGGER = trigger;
         location.SENDING_DISTANCE = settings.sendingDistance;

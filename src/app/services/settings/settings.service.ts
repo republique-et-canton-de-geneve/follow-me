@@ -35,7 +35,7 @@ import {Platform} from '@ionic/angular';
 export interface Settings {
     version: number;
     baseUrl: string;
-    simNumber: string;
+    idUnique: string;
     uuid: string;
     backgroundGeolocationConfig: BackgroundGeolocationConfig;
     sendingInterval: number;
@@ -46,7 +46,7 @@ export interface Settings {
     disclaimer?: string;
 
     baseUrlReadonly: boolean;
-    simNumberReadonly: boolean;
+    idUniqueReadonly: boolean;
     uuidReadonly: boolean;
 	ecoMaxReadonly: boolean;
 	ecoInterReadonly: boolean;
@@ -82,7 +82,7 @@ export class SettingsService {
         const settings: Settings = {
             version: SettingsService.CURRENT_VERSION,
             baseUrl: environment.apiEndpoint,
-            simNumber: '',
+            idUnique: '',
             uuid: this.device.uuid,
             ecoMode: true,
             ecoMax: 10,
@@ -101,7 +101,7 @@ export class SettingsService {
             sendingDistance: SettingsService.DEFAULT_SENDING_DISTANCE,
             disclaimer: environment.defaultDisclaimer,
 			baseUrlReadonly: false,
-			simNumberReadonly: false,
+			idUniqueReadonly: false,
 			uuidReadonly: false,
 			ecoMaxReadonly: false,
 			ecoInterReadonly: false,
@@ -109,27 +109,13 @@ export class SettingsService {
 			sendingDistanceReadonly: false
         };
         this.settingsPopulated = true;
-        return this.sim.requestReadPermission().then(
-            () => {
-                return this.sim.getSimInfo().then((info: any) => {
-                    return info.cards[0].simSerialNumber;
-                }, (err: any) => {
-                    return 'unknown';
-                });
-            },
-            () => {
-                return 'unauthorized';
-            }
-        ).then((simNumber: string) => {
-            settings.simNumber = simNumber;
-            return this.setSettings(settings);
-        });
+		return this.setSettings(settings);
     }
 
     refreshEMMvalues() {
         const baseUrl = this.emmAppConfig.getValue('baseUrl');
         const disclaimer = this.emmAppConfig.getValue('disclaimer');
-        const simNumber = this.emmAppConfig.getValue('simNumber');
+        const idUnique = this.emmAppConfig.getValue('idUnique');
         const uuid = this.emmAppConfig.getValue("uuid");
         const ecoMax = this.emmAppConfig.getValue("ecoMax");
         const ecoInter = this.emmAppConfig.getValue("ecoInter");
@@ -144,11 +130,11 @@ export class SettingsService {
 					settings.baseUrlReadonly = true;
 				}
             }
-            if (simNumber && settings.simNumber !== simNumber) {
-                settings.simNumber = simNumber;
+            if (idUnique && settings.idUnique !== idUnique) {
+                settings.idUnique = idUnique;
                 change = true;
-				if(simNumber !== '') {
-					settings.simNumberReadonly = true;
+				if(idUnique !== '') {
+					settings.idUniqueReadonly = true;
 				}
             }
             if (uuid && settings.uuid !== uuid) {
