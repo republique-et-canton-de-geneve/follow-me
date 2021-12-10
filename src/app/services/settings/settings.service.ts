@@ -26,7 +26,6 @@ import {
     BackgroundGeolocationConfig,
     BackgroundGeolocationLocationProvider
 } from '@ionic-native/background-geolocation/ngx';
-import {Sim} from '@ionic-native/sim/ngx';
 import {Device} from '@ionic-native/device/ngx';
 import {EmmAppConfig} from '@ionic-native/emm-app-config/ngx';
 import {Platform} from '@ionic/angular';
@@ -64,7 +63,6 @@ export class SettingsService {
     public settingsPopulated = false;
 
     constructor(public storage: Storage,
-                private readonly sim: Sim,
                 private readonly device: Device,
                 private readonly platform: Platform,
                 private readonly emmAppConfig: EmmAppConfig) {

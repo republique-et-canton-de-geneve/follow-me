@@ -32,7 +32,6 @@ import {BackgroundGeolocation} from '@ionic-native/background-geolocation/ngx';
 import {BatteryStatus} from '@ionic-native/battery-status/ngx';
 import {IonicStorageModule} from '@ionic/storage';
 import {AppVersion} from '@ionic-native/app-version/ngx';
-import {Sim} from '@ionic-native/sim/ngx';
 import {Device} from '@ionic-native/device/ngx';
 import {HTTP} from '@ionic-native/http/ngx';
 import {TermsPage} from './pages/terms/terms.page';
@@ -56,7 +55,6 @@ import {File} from '@ionic-native/file/ngx';
         BackgroundGeolocation,
         BatteryStatus,
         AppVersion,
-        Sim,
         Device,
         HTTP,
         EmmAppConfig,
