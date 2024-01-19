@@ -22,8 +22,8 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {IonicModule, AlertController, Platform, ModalController, ToastController} from '@ionic/angular';
 
 import {HomePage} from './home.page';
-import {BackgroundGeolocation} from '@ionic-native/background-geolocation/ngx';
-import {DeviceOrientation} from '@ionic-native/device-orientation/ngx';
+import {BackgroundGeolocation} from '@awesome-cordova-plugins/background-geolocation/ngx';
+import {DeviceOrientation} from '@awesome-cordova-plugins/device-orientation/ngx';
 import {ApiService} from '../../services/api/api.service';
 import {SettingsService} from '../../services/settings/settings.service';
 import {LogsService} from '../../services/logs/logs.service';

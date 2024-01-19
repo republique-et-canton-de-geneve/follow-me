@@ -18,7 +18,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {LogProvider} from "ionic-log-file-appender";
+import {LogProvider} from "../../libs/ionic-log-file-appender/log.service";
 
 
 @Injectable()

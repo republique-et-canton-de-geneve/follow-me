@@ -20,7 +20,7 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {environment} from '../../../environments/environment';
-import {BackgroundGeolocationResponse} from "@ionic-native/background-geolocation/ngx";
+import {BackgroundGeolocationResponse} from "@awesome-cordova-plugins/background-geolocation/ngx";
 import {Trigger} from "../api/api.service";
 
 export interface BufferedLocation {
@@ -50,8 +50,9 @@ export class BufferService {
     }
 
     setBuffer(buffer: BufferedLocation[]) {
-        console.log('setBuffer()');
-        console.log(buffer);
+        buffer.sort((a, b)=>{
+          return a.location.time - b.location.time;
+        });
         return this.storage.set(BufferService.BUFFER_STORAGE_KEY, buffer);
     }
 

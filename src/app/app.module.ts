@@ -22,31 +22,31 @@ import {BrowserModule} from '@angular/platform-browser';
 import {RouteReuseStrategy} from '@angular/router';
 
 import {IonicModule, IonicRouteStrategy, Platform} from '@ionic/angular';
-import {SplashScreen} from '@ionic-native/splash-screen/ngx';
-import {StatusBar} from '@ionic-native/status-bar/ngx';
+import {SplashScreen} from '@awesome-cordova-plugins/splash-screen/ngx';
+import {StatusBar} from '@awesome-cordova-plugins/status-bar/ngx';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-import {DeviceOrientation} from '@ionic-native/device-orientation/ngx';
-import {BackgroundGeolocation} from '@ionic-native/background-geolocation/ngx';
-import {BatteryStatus} from '@ionic-native/battery-status/ngx';
-import {IonicStorageModule} from '@ionic/storage';
-import {AppVersion} from '@ionic-native/app-version/ngx';
-import {Device} from '@ionic-native/device/ngx';
-import {HTTP} from '@ionic-native/http/ngx';
+import {DeviceOrientation} from '@awesome-cordova-plugins/device-orientation/ngx';
+import {BackgroundGeolocation} from '@awesome-cordova-plugins/background-geolocation/ngx';
+import {BatteryStatus} from '@awesome-cordova-plugins/battery-status/ngx';
+import {AppVersion} from '@awesome-cordova-plugins/app-version/ngx';
+import {Device} from '@awesome-cordova-plugins/device/ngx';
+import {HTTP} from '@awesome-cordova-plugins/http/ngx';
 import {TermsPage} from './pages/terms/terms.page';
 import {SettingsService} from './services/settings/settings.service';
 import {ApiService} from './services/api/api.service';
 import {BufferService} from './services/buffer/buffer.service';
 import {LogsService} from './services/logs/logs.service';
 import {DatePipe} from '@angular/common';
-import {LogProvider, LogFileAppenderModule} from 'ionic-log-file-appender';
-import {EmmAppConfig} from '@ionic-native/emm-app-config/ngx';
-import {File} from '@ionic-native/file/ngx';
+import {File} from '@awesome-cordova-plugins/file/ngx/index';
+import {LogProvider} from "./libs/ionic-log-file-appender/log.service";
+import { Drivers } from '@ionic/storage';
+import {IonicStorageModule} from "@ionic/storage-angular";
+
 
 @NgModule({
     declarations: [AppComponent, TermsPage],
-    entryComponents: [TermsPage],
     providers: [
         File,
         StatusBar,
@@ -57,7 +57,6 @@ import {File} from '@ionic-native/file/ngx';
         AppVersion,
         Device,
         HTTP,
-        EmmAppConfig,
         DatePipe,
         LogProvider,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
@@ -69,9 +68,8 @@ import {File} from '@ionic-native/file/ngx';
     ],
     imports: [BrowserModule, IonicModule.forRoot(), IonicStorageModule.forRoot({
         name: 'followme',
-        driverOrder: ['sqlite', 'indexeddb', 'websql']
-    }),
-        LogFileAppenderModule.forRoot(), AppRoutingModule],
+        driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
+    }), AppRoutingModule],
     bootstrap: [AppComponent]
 })
 export class AppModule {

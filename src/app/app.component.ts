@@ -20,15 +20,16 @@
 import {Component} from '@angular/core';
 
 import {ModalController, Platform} from '@ionic/angular';
-import {SplashScreen} from '@ionic-native/splash-screen/ngx';
-import {StatusBar} from '@ionic-native/status-bar/ngx';
+import {SplashScreen} from '@awesome-cordova-plugins/splash-screen/ngx';
+import {StatusBar} from '@awesome-cordova-plugins/status-bar/ngx';
 import {
     BackgroundGeolocation
-} from '@ionic-native/background-geolocation/ngx';
+} from '@awesome-cordova-plugins/background-geolocation/ngx';
 import {TermsPage} from './pages/terms/terms.page';
 import {SettingsService} from './services/settings/settings.service';
 import {Router} from '@angular/router';
-import {LogProvider} from "ionic-log-file-appender";
+import {LogProvider} from "./libs/ionic-log-file-appender/log.service";
+import { Storage } from '@ionic/storage-angular';
 
 
 @Component({
@@ -61,6 +62,7 @@ export class AppComponent {
         private readonly settingsService: SettingsService,
         private readonly window: Window,
         private readonly log: LogProvider,
+        private readonly storage: Storage,
     ) {
         this.initializeApp();
     }
@@ -79,15 +81,16 @@ export class AppComponent {
                 this.log.init({});
             }
 
+          this.storage.create().then(()=>{
             // Get settings to detect the first launch
             this.settingsService.getSettings().then(settings => {
-                if (!settings || !settings.version || settings.version < SettingsService.CURRENT_VERSION) {
-                    this.presentTerms();
-                } else {
-                    this.onTermsAccepted();
-                }
+              if (!settings || !settings.version || settings.version < SettingsService.CURRENT_VERSION) {
+                this.presentTerms();
+              } else {
+                this.onTermsAccepted();
+              }
             });
-
+          });
         });
     }
 

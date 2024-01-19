@@ -21,177 +21,173 @@ import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {environment} from '../../../environments/environment';
 import {
-    BackgroundGeolocation,
-    BackgroundGeolocationAccuracy,
-    BackgroundGeolocationConfig,
-    BackgroundGeolocationLocationProvider
-} from '@ionic-native/background-geolocation/ngx';
-import {Device} from '@ionic-native/device/ngx';
-import {EmmAppConfig} from '@ionic-native/emm-app-config/ngx';
+  BackgroundGeolocation,
+  BackgroundGeolocationAccuracy,
+  BackgroundGeolocationConfig,
+  BackgroundGeolocationLocationProvider
+} from '@awesome-cordova-plugins/background-geolocation/ngx';
+import {Device} from '@awesome-cordova-plugins/device/ngx';
 import {Platform} from '@ionic/angular';
+
+declare var cordova: any;
 
 
 export interface Settings {
-    version: number;
-    baseUrl: string;
-    idUnique: string;
-    uuid: string;
-    backgroundGeolocationConfig: BackgroundGeolocationConfig;
-    sendingInterval: number;
-    sendingDistance: number;
-    ecoMode: boolean;
-    ecoInter: number;
-    ecoMax: number;
-    disclaimer?: string;
+  version: number;
+  baseUrl: string;
+  idUnique: string;
+  uuid: string;
+  backgroundGeolocationConfig: BackgroundGeolocationConfig;
+  sendingInterval: number;
+  sendingDistance: number;
+  ecoMode: boolean;
+  ecoInter: number;
+  ecoMax: number;
+  disclaimer?: string;
 
-    baseUrlReadonly: boolean;
-    idUniqueReadonly: boolean;
-    uuidReadonly: boolean;
-	ecoMaxReadonly: boolean;
-	ecoInterReadonly: boolean;
-	sendingIntervalReadonly: boolean;
-	sendingDistanceReadonly: boolean;
+  baseUrlReadonly: boolean;
+  idUniqueReadonly: boolean;
+  uuidReadonly: boolean;
+  ecoMaxReadonly: boolean;
+  ecoInterReadonly: boolean;
+  sendingIntervalReadonly: boolean;
+  sendingDistanceReadonly: boolean;
 }
 
 @Injectable()
 export class SettingsService {
 
-    private static readonly SETTINGS_STORAGE_KEY = 'settings';
-    private static readonly DEFAULT_SENDING_INTERVAL = 900;
-    private static readonly DEFAULT_SENDING_DISTANCE = 5;
-    public static readonly CURRENT_VERSION = 3;
-    public settingsPopulated = false;
+  private static readonly SETTINGS_STORAGE_KEY = 'settings';
+  private static readonly DEFAULT_SENDING_INTERVAL = 900;
+  private static readonly DEFAULT_SENDING_DISTANCE = 5;
+  public static readonly CURRENT_VERSION = 3;
+  public settingsPopulated = false;
 
-    constructor(public storage: Storage,
-                private readonly device: Device,
-                private readonly platform: Platform,
-                private readonly emmAppConfig: EmmAppConfig) {
+  constructor(public storage: Storage,
+              private readonly device: Device,
+              private readonly platform: Platform) {
 
-        this.platform.ready().then(() => {
-            this.emmAppConfig.registerChangedListener()
-                .subscribe(() => {
-                        this.refreshEMMvalues();
-                    }
-                );
-        });
-    }
+    this.platform.ready().then(() => {
+      cordova.plugins['EmmAppConfig'].registerChangedListener(this.refreshEMMvalues);
+    });
+  }
 
-    initSettings() {
-        const settings: Settings = {
-            version: SettingsService.CURRENT_VERSION,
-            baseUrl: environment.apiEndpoint,
-            idUnique: '',
-            uuid: this.device.uuid,
-            ecoMode: true,
-            ecoMax: 10,
-            ecoInter: 20,
-            backgroundGeolocationConfig: {
-                locationProvider: BackgroundGeolocationLocationProvider.RAW_PROVIDER,
-                interval: 2000,
-                fastestInterval: 1000,
-                desiredAccuracy: 0,
-                stationaryRadius: 1,
-                distanceFilter: 1,
-                stopOnTerminate: false, // enable this to clear background location settings when the app terminates
-                maxLocations: 0,
-            },
-            sendingInterval: SettingsService.DEFAULT_SENDING_INTERVAL,
-            sendingDistance: SettingsService.DEFAULT_SENDING_DISTANCE,
-            disclaimer: environment.defaultDisclaimer,
-			baseUrlReadonly: false,
-			idUniqueReadonly: false,
-			uuidReadonly: false,
-			ecoMaxReadonly: false,
-			ecoInterReadonly: false,
-			sendingIntervalReadonly: false,
-			sendingDistanceReadonly: false
-        };
-        this.settingsPopulated = true;
-		return this.setSettings(settings);
-    }
+  initSettings() {
+    const settings: Settings = {
+      version: SettingsService.CURRENT_VERSION,
+      baseUrl: environment.apiEndpoint,
+      idUnique: '',
+      uuid: this.device.uuid,
+      ecoMode: true,
+      ecoMax: 10,
+      ecoInter: 20,
+      backgroundGeolocationConfig: {
+        locationProvider: BackgroundGeolocationLocationProvider.RAW_PROVIDER,
+        interval: 2000,
+        fastestInterval: 1000,
+        desiredAccuracy: 0,
+        stationaryRadius: 1,
+        distanceFilter: 1,
+        stopOnTerminate: false, // enable this to clear background location settings when the app terminates
+        maxLocations: 0,
+      },
+      sendingInterval: SettingsService.DEFAULT_SENDING_INTERVAL,
+      sendingDistance: SettingsService.DEFAULT_SENDING_DISTANCE,
+      disclaimer: environment.defaultDisclaimer,
+      baseUrlReadonly: false,
+      idUniqueReadonly: false,
+      uuidReadonly: false,
+      ecoMaxReadonly: false,
+      ecoInterReadonly: false,
+      sendingIntervalReadonly: false,
+      sendingDistanceReadonly: false
+    };
+    this.settingsPopulated = true;
+    return this.setSettings(settings);
+  }
 
-    refreshEMMvalues() {
-        const baseUrl = this.emmAppConfig.getValue('baseUrl');
-        const disclaimer = this.emmAppConfig.getValue('disclaimer');
-        const idUnique = this.emmAppConfig.getValue('idUnique');
-        const uuid = this.emmAppConfig.getValue("uuid");
-        const ecoMax = this.emmAppConfig.getValue("ecoMax");
-        const ecoInter = this.emmAppConfig.getValue("ecoInter");
-        const sendingInterval = this.emmAppConfig.getValue("sendingInterval");
-        const sendingDistance = this.emmAppConfig.getValue("sendingDistance");
-        let change = false;
-        this.getSettings().then((settings: Settings) => {
-            if (baseUrl && settings.baseUrl !== baseUrl) {
-                settings.baseUrl = baseUrl;
-                change = true;
-				if(baseUrl !== '') {
-					settings.baseUrlReadonly = true;
-				}
-            }
-            if (idUnique && settings.idUnique !== idUnique) {
-                settings.idUnique = idUnique;
-                change = true;
-				if(idUnique !== '') {
-					settings.idUniqueReadonly = true;
-				}
-            }
-            if (uuid && settings.uuid !== uuid) {
-                settings.uuid = uuid;
-                change = true;
-				if(uuid !== '') {
-					settings.uuidReadonly = true;
-				}
-            }
-            if (ecoMax && settings.ecoMax !== ecoMax) {
-                settings.ecoMax = ecoMax;
-                change = true;
-				if(ecoMax !== '') {
-					settings.ecoMaxReadonly = true;
-				}
-            }
-            if (ecoInter && settings.ecoInter !== ecoInter) {
-                settings.ecoInter = ecoInter;
-                change = true;
-				if(ecoInter !== '') {
-					settings.ecoInterReadonly = true;
-				}
-            }
-            if (sendingInterval && settings.sendingInterval !== sendingInterval) {
-                settings.sendingInterval = sendingInterval;
-                change = true;
-				if(sendingInterval !== '') {
-					settings.sendingIntervalReadonly = true;
-				}
-            }
-            if (sendingDistance && settings.sendingDistance !== sendingDistance) {
-                settings.sendingDistance = sendingDistance;
-                change = true;
-				if(sendingDistance !== '') {
-					settings.sendingDistanceReadonly = true;
-				}
-            }
-            if (disclaimer && settings.disclaimer !== disclaimer) {
-                settings.disclaimer = disclaimer;
-                change = true;
-            }
+  refreshEMMvalues() {
+    const baseUrl = cordova.plugins['EmmAppConfig'].getValue('baseUrl');
+    const disclaimer = cordova.plugins['EmmAppConfig'].getValue('disclaimer');
+    const idUnique = cordova.plugins['EmmAppConfig'].getValue('idUnique');
+    const uuid = cordova.plugins['EmmAppConfig'].getValue("uuid");
+    const ecoMax = cordova.plugins['EmmAppConfig'].getValue("ecoMax");
+    const ecoInter = cordova.plugins['EmmAppConfig'].getValue("ecoInter");
+    const sendingInterval = cordova.plugins['EmmAppConfig'].getValue("sendingInterval");
+    const sendingDistance = cordova.plugins['EmmAppConfig'].getValue("sendingDistance");
+    let change = false;
+    this.getSettings().then((settings: Settings) => {
+      if (baseUrl && settings.baseUrl !== baseUrl) {
+        settings.baseUrl = baseUrl;
+        change = true;
+        if (baseUrl !== '') {
+          settings.baseUrlReadonly = true;
+        }
+      }
+      if (idUnique && settings.idUnique !== idUnique) {
+        settings.idUnique = idUnique;
+        change = true;
+        if (idUnique !== '') {
+          settings.idUniqueReadonly = true;
+        }
+      }
+      if (uuid && settings.uuid !== uuid) {
+        settings.uuid = uuid;
+        change = true;
+        if (uuid !== '') {
+          settings.uuidReadonly = true;
+        }
+      }
+      if (ecoMax && settings.ecoMax !== ecoMax) {
+        settings.ecoMax = ecoMax;
+        change = true;
+        if (ecoMax !== '') {
+          settings.ecoMaxReadonly = true;
+        }
+      }
+      if (ecoInter && settings.ecoInter !== ecoInter) {
+        settings.ecoInter = ecoInter;
+        change = true;
+        if (ecoInter !== '') {
+          settings.ecoInterReadonly = true;
+        }
+      }
+      if (sendingInterval && settings.sendingInterval !== sendingInterval) {
+        settings.sendingInterval = sendingInterval;
+        change = true;
+        if (sendingInterval !== '') {
+          settings.sendingIntervalReadonly = true;
+        }
+      }
+      if (sendingDistance && settings.sendingDistance !== sendingDistance) {
+        settings.sendingDistance = sendingDistance;
+        change = true;
+        if (sendingDistance !== '') {
+          settings.sendingDistanceReadonly = true;
+        }
+      }
+      if (disclaimer && settings.disclaimer !== disclaimer) {
+        settings.disclaimer = disclaimer;
+        change = true;
+      }
 
-            if (change) {
-                settings.version++;
-                this.setSettings(settings);
-            }
-        });
-    }
+      if (change) {
+        settings.version++;
+        this.setSettings(settings);
+      }
+    });
+  }
 
-    getDisclaimer(): string {
-        const disclaimer = this.emmAppConfig.getValue('disclaimer');
-        return disclaimer ? disclaimer : environment.defaultDisclaimer;
-    }
+  getDisclaimer(): string {
+    const disclaimer = cordova.plugins['EmmAppConfig'].getValue('disclaimer');
+    return disclaimer ? disclaimer : environment.defaultDisclaimer;
+  }
 
-    getSettings() {
-        return this.storage.get(SettingsService.SETTINGS_STORAGE_KEY);
-    }
+  getSettings() {
+    return this.storage.get(SettingsService.SETTINGS_STORAGE_KEY);
+  }
 
-    setSettings(settings: Settings) {
-        return this.storage.set(SettingsService.SETTINGS_STORAGE_KEY, settings);
-    }
+  setSettings(settings: Settings) {
+    return this.storage.set(SettingsService.SETTINGS_STORAGE_KEY, settings);
+  }
 }

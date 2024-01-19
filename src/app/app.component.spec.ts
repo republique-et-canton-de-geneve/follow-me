@@ -21,11 +21,11 @@ import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {TestBed, async} from '@angular/core/testing';
 
 import {ModalController, Platform} from '@ionic/angular';
-import {SplashScreen} from '@ionic-native/splash-screen/ngx';
-import {StatusBar} from '@ionic-native/status-bar/ngx';
+import {SplashScreen} from '@awesome-cordova-plugins/splash-screen/ngx';
+import {StatusBar} from '@awesome-cordova-plugins/status-bar/ngx';
 
 import {AppComponent} from './app.component';
-import {BackgroundGeolocation} from '@ionic-native/background-geolocation/ngx';
+import {BackgroundGeolocation} from '@awesome-cordova-plugins/background-geolocation/ngx';
 import {Router} from "@angular/router";
 import {SettingsService} from "./services/settings/settings.service";
 

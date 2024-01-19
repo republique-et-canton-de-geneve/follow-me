@@ -19,9 +19,9 @@
 
 import {Injectable} from '@angular/core';
 import {Settings, SettingsService} from '../settings/settings.service';
-import {HTTP, HTTPResponse} from '@ionic-native/http/ngx';
-import {BackgroundGeolocationResponse} from '@ionic-native/background-geolocation/ngx';
-import {BatteryStatus, BatteryStatusResponse} from '@ionic-native/battery-status/ngx';
+import {HTTP, HTTPResponse} from '@awesome-cordova-plugins/http/ngx';
+import {BackgroundGeolocationResponse} from '@awesome-cordova-plugins/background-geolocation/ngx';
+import {BatteryStatus, BatteryStatusResponse} from '@awesome-cordova-plugins/battery-status/ngx';
 import {ToastController} from '@ionic/angular';
 import {BufferedLocation, BufferService} from '../buffer/buffer.service';
 import {LogsService} from '../logs/logs.service';
@@ -61,6 +61,8 @@ export class ApiService {
     public lastPostSuccess: number;
     public lastPostIsSuccess = false;
 
+    public isSending = false;
+
     public lastBatteryStatus: BatteryStatusResponse;
 
 
@@ -86,29 +88,43 @@ export class ApiService {
         toast.present();
     }
 
-    async sendLocation(aLocation: BackgroundGeolocationResponse, trigger: Trigger): Promise<HTTPResponse> {
-        const settings = await this.settingsService.getSettings();
-        const request = this.http.post(settings.baseUrl, this.buildApiLocation(aLocation, trigger, settings), {});
-        request.then(data => {
-            this.lastPostSuccess = new Date().getTime();
-            this.lastPostIsSuccess = true;
-            // Send stored locations
-            this.bufferService.getBuffer().then((buffer: BufferedLocation[]) => {
-                if (buffer && buffer.length > 0) {
-                    const bufferedLocation: BufferedLocation = buffer[0];
-                    this.sendLocation(bufferedLocation.location, bufferedLocation.trigger);
-                    this.bufferService.removeLocation(bufferedLocation.timestamp);
-                }
-            });
-        }).catch(error => {
-            this.lastPostIsSuccess = false;
-            this.errorToast(error.error);
-            // Store location if it's not a setting update
-            if (trigger !== Trigger.UPDATE) {
-                this.bufferService.addLocation(aLocation, error, trigger);
+    async sendLocation(aLocation: BackgroundGeolocationResponse, trigger: Trigger): Promise<void> {
+        await this.bufferService.addLocation(aLocation, {}, trigger);
+        const buffer = await this.bufferService.getBuffer();
+        if (!this.isSending) {
+          await this.requestForLocation(buffer[0]);
+        }
+        return Promise.resolve();
+    }
+
+    async requestForLocation(bufferLocation : BufferedLocation) {
+      const settings = await this.settingsService.getSettings();
+      const request = this.http.post(settings.baseUrl, this.buildApiLocation(bufferLocation.location, bufferLocation.trigger, settings), {});
+      this.isSending = true;
+      request.then(data => {
+        this.lastPostSuccess = new Date().getTime();
+        this.lastPostIsSuccess = true;
+        this.bufferService.removeLocation(bufferLocation.timestamp).then(()=>{
+          this.bufferService.getBuffer().then((buffer: BufferedLocation[]) => {
+            if (buffer && buffer.length > 0) {
+              const bufferedLocation: BufferedLocation = buffer[0];
+              this.requestForLocation(bufferedLocation);
+            }else{
+              this.isSending = false;
             }
+          });
         });
-        return request;
+      }).catch(error => {
+        this.lastPostIsSuccess = false;
+        this.isSending = false;
+        this.errorToast(error.error);
+        this.bufferService.removeLocation(bufferLocation.timestamp).then(()=>{
+          // Store location if it's not a setting update
+          if (bufferLocation.trigger !== Trigger.UPDATE) {
+            this.bufferService.addLocation(bufferLocation.location, error, bufferLocation.trigger);
+          }
+        });
+      });
     }
 
     async validLocation(aLocation: BackgroundGeolocationResponse): Promise<[boolean, Trigger, BackgroundGeolocationResponse]> {

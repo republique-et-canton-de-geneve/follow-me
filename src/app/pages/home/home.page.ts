@@ -19,13 +19,13 @@
 
 import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {AlertController, ModalController, Platform, ToastController} from '@ionic/angular';
-import {DeviceOrientation, DeviceOrientationCompassHeading} from '@ionic-native/device-orientation/ngx';
+import {DeviceOrientation, DeviceOrientationCompassHeading} from '@awesome-cordova-plugins/device-orientation/ngx';
 import {
     BackgroundGeolocation,
     BackgroundGeolocationAuthorizationStatus,
     BackgroundGeolocationEvents, BackgroundGeolocationLocationProvider,
     BackgroundGeolocationResponse
-} from '@ionic-native/background-geolocation/ngx';
+} from '@awesome-cordova-plugins/background-geolocation/ngx';
 import {SettingsPage} from '../settings/settings.page';
 import {ApiService} from '../../services/api/api.service';
 import {Settings, SettingsService} from '../../services/settings/settings.service';

@@ -19,13 +19,13 @@
 
 import {Component} from '@angular/core';
 import {ModalController} from '@ionic/angular';
-import {AppVersion} from '@ionic-native/app-version/ngx';
+import {AppVersion} from '@awesome-cordova-plugins/app-version/ngx';
 import {SettingsService, Settings} from '../../services/settings/settings.service';
 import {ApiService, Trigger} from '../../services/api/api.service';
 import {BufferedLocation, BufferService} from '../../services/buffer/buffer.service';
-import {BackgroundGeolocationConfig} from '@ionic-native/background-geolocation';
-import {BackgroundGeolocation} from '@ionic-native/background-geolocation/ngx';
-import {LogProvider} from 'ionic-log-file-appender';
+import {BackgroundGeolocationConfig} from '@awesome-cordova-plugins/background-geolocation';
+import {BackgroundGeolocation} from '@awesome-cordova-plugins/background-geolocation/ngx';
+import {LogProvider} from "../../libs/ionic-log-file-appender/log.service";
 
 @Component({
     selector: 'settings-page',
